@@ -99,6 +99,42 @@
   <p class="note">URL này có thể đổi nếu Codespace được tạo lại, và chỉ truy cập được khi Codespace đang chạy, server đã được bật bằng <code>npm start</code>, và cổng 3000 trong tab PORTS đang để chế độ <b>Public</b>.</p>
 
   <footer>Trang tĩnh phục vụ bởi GitHub Pages từ thư mục <code>/docs</code> của nhánh <code>main</code>.</footer>
+  <h2>So sánh: máy cá nhân và Codespace</h2>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Tiêu chí</th><th>Máy cá nhân</th><th>Codespace</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Thời gian từ lúc bắt đầu đến khi chạy được <code>node -v</code></td>
+        <td>Node đã được cài sẵn từ trước nên <code>node -v</code> chạy ngay (v20.17.0). Thời gian cài mới từ đầu không được đo trong bài này.</td>
+        <td>Khoảng 4 phút 8 giây: bấm Create lúc 07:07:08 UTC, terminal sẵn sàng lúc 07:11:16 UTC (ngày 05/11/2026, lần dựng đầu vì phải build image có Java và Docker). Sau đó <code>node -v</code> cho v22.23.4.</td>
+      </tr>
+      <tr>
+        <td>Số CPU, RAM (từ API)</td>
+        <td>Intel Core i5-11400H, 12 luồng, 15,7 GB RAM (đọc từ thông tin hệ thống của máy).</td>
+        <td><code>cpus: 2</code>, <code>memoryGB: 7.8</code> (kết quả <code>GET /</code>, host <code>codespaces-fa6c08</code>).</td>
+      </tr>
+      <tr>
+        <td>Hệ điều hành</td>
+        <td>Windows 11 Home Single Language, bản 10.0.22631.</td>
+        <td>Debian GNU/Linux 13 (trixie), nhân Linux 6.8.0-1064-azure (container chạy trên máy ảo Azure).</td>
+      </tr>
+      <tr>
+        <td>Cách truy cập từ thiết bị khác</td>
+        <td>Phải cùng mạng LAN, biết IP nội bộ, mở cổng trên tường lửa; muốn ra Internet phải cấu hình router hoặc dùng tunnel.</td>
+        <td>Cổng 3000 được chuyển tiếp thành URL HTTPS dạng <code>https://&lt;tên&gt;-3000.app.github.dev</code>. Mặc định là Private; đã đổi sang Public, truy cập từ bên ngoài không cần đăng nhập (HTTP 200), rồi đặt lại Private (người ngoài bị chuyển tới trang đăng nhập, HTTP 302).</td>
+      </tr>
+      <tr>
+        <td>Chi phí, đo bằng gì</td>
+        <td>Điện năng và khấu hao máy; không có công cụ đo sẵn trong bài.</td>
+        <td>Settings, Billing, Usage (ngày 05/11/2026): Codespaces storage 0,6 GB-tháng, gross $0,04, billed $0; Actions Linux 22 phút, gross $0,13, billed $0. Số core-giờ tính toán của codespace chưa hiện lúc chụp vì dữ liệu billing cập nhật chậm; ước tính codespace chạy khoảng 10 phút với 2 core, tức khoảng 0,3 core-giờ, nằm trong hạn mức miễn phí 120 core-giờ mỗi tháng.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
 </main>
 </body>
 </html>
