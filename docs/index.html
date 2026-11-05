@@ -3,182 +3,381 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TDMU Notes API - Bài 1: Đặc tính điện toán đám mây NIST</title>
+  <title>Hello Cloud - Bài 1: Đặc tính điện toán đám mây NIST</title>
+  <meta name="description" content="Bài 1 Thực hành Điện toán đám mây: API Hello Cloud trên GitHub Codespaces, đối chiếu 5 đặc tính NIST.">
   <style>
-    :root { --fg: #1f2933; --muted: #52606d; --line: #d9e2ec; --accent: #0b6bcb; --bg: #ffffff; --soft: #f5f7fa; }
+    :root {
+      --bg: #070a1f; --bg2: #0d1033; --card: rgba(255,255,255,.045); --card-b: rgba(139,125,255,.28);
+      --fg: #eef0ff; --muted: #a9aed0; --line: rgba(139,125,255,.22);
+      --p1: #8b5cf6; --p2: #6366f1; --b1: #38bdf8; --ok: #34d399;
+      --grad: linear-gradient(90deg, #a78bfa, #60a5fa);
+      --btn: linear-gradient(90deg, #8b5cf6, #6366f1);
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
-    main { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
-    h1 { font-size: 1.6rem; line-height: 1.3; margin: 0 0 4px; }
-    h2 { font-size: 1.2rem; margin-top: 32px; border-bottom: 2px solid var(--line); padding-bottom: 4px; }
-    .sub { color: var(--muted); margin-top: 0; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
-    th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
-    th { background: var(--soft); }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    body {
+      margin: 0; color: var(--fg); line-height: 1.65;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(900px 600px at 85% -10%, rgba(139,92,246,.35), transparent 60%),
+        radial-gradient(700px 500px at 0% 20%, rgba(56,189,248,.14), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      background-attachment: fixed;
+    }
+    a { color: #93c5fd; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: rgba(139,125,255,.16); color: #ddd6fe; padding: 1px 6px; border-radius: 6px; font-size: .88em; word-break: break-word; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    /* ---------- thanh điều hướng ---------- */
+    .nav { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px); background: rgba(7,10,31,.72); border-bottom: 1px solid var(--line); }
+    .nav .wrap { display: flex; align-items: center; gap: 22px; height: 66px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; color: var(--fg); text-decoration: none; letter-spacing: .2px; }
+    .brand .logo { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--btn); box-shadow: 0 0 22px rgba(139,92,246,.6); font-size: 1rem; }
+    .brand span.g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .links { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+    .links a { color: var(--muted); text-decoration: none; padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: .95rem; transition: .2s; }
+    .links a:hover { color: var(--fg); background: rgba(139,125,255,.14); }
+    .links a.on { color: #fff; background: rgba(139,92,246,.35); box-shadow: inset 0 0 0 1px var(--card-b); }
+    .chip { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--card-b); color: var(--muted); font-size: .85rem; white-space: nowrap; }
+
+    /* ---------- hero ---------- */
+    .hero { padding: 64px 0 28px; }
+    .hero .grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 36px; align-items: center; }
+    .pill { display: inline-block; padding: 8px 18px; border-radius: 999px; border: 1px solid var(--card-b); background: rgba(139,125,255,.1); font-size: .95rem; }
+    h1 { font-size: clamp(2.1rem, 4.4vw, 3.5rem); line-height: 1.14; margin: 20px 0 14px; font-weight: 800; letter-spacing: -.5px; text-wrap: balance; }
+    h1 .g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { color: var(--muted); font-size: 1.08rem; max-width: 560px; }
+    .btns { display: flex; gap: 14px; flex-wrap: wrap; margin: 26px 0; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border-radius: 999px; font-weight: 700; text-decoration: none; transition: .2s; }
+    .btn.p { background: var(--btn); color: #fff; box-shadow: 0 8px 30px rgba(99,102,241,.45); }
+    .btn.p:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(99,102,241,.6); }
+    .btn.o { color: var(--fg); border: 1.5px solid var(--card-b); background: rgba(255,255,255,.03); }
+    .btn.o:hover { background: rgba(139,125,255,.14); }
+    .stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 8px; }
+    .stats div { display: flex; align-items: center; gap: 12px; }
+    .stats .ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: rgba(139,125,255,.16); border: 1px solid var(--card-b); font-size: 1.15rem; }
+    .stats b { display: block; font-size: 1.25rem; line-height: 1.2; }
+    .stats small { color: var(--muted); }
+
+    /* khối minh họa bên phải */
+    .art { position: relative; min-height: 380px; }
+    .art::before { content: ""; position: absolute; inset: 18% 4% 4% 4%; border-radius: 50%; background: radial-gradient(closest-side, rgba(99,102,241,.55), transparent 70%); filter: blur(10px); }
+    .term { position: relative; margin: 30px auto 0; width: min(440px, 92%); border-radius: 18px; border: 1px solid var(--card-b); background: linear-gradient(160deg, rgba(30,27,75,.92), rgba(13,16,51,.92)); box-shadow: 0 30px 70px rgba(0,0,0,.5), 0 0 60px rgba(139,92,246,.35); overflow: hidden; transform: perspective(900px) rotateY(-8deg) rotateX(3deg); }
+    .term .bar { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: .78rem; color: var(--muted); }
+    .term .bar i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .term pre { margin: 0; padding: 18px 20px 22px; font: .86rem/1.7 ui-monospace, Consolas, Menlo, monospace; color: #c7d2fe; white-space: pre-wrap; }
+    .term .k { color: #a78bfa; } .term .s { color: #86efac; } .term .n { color: #fcd34d; } .term .c { color: #7c85b8; }
+    .float { position: absolute; padding: 10px 16px; border-radius: 14px; border: 1px solid var(--card-b); background: rgba(20,22,66,.85); backdrop-filter: blur(8px); font-weight: 700; font-size: .9rem; box-shadow: 0 14px 40px rgba(0,0,0,.4); animation: bob 5s ease-in-out infinite; }
+    .float.a { top: 0; left: 2%; } .float.b { top: 6%; right: 0; animation-delay: -1.5s; } .float.c { bottom: 8%; right: 2%; animation-delay: -3s; } .float.d { bottom: 2%; left: 0; animation-delay: -2.2s; }
+    @keyframes bob { 50% { transform: translateY(-9px); } }
+    @media (prefers-reduced-motion: reduce) { .float { animation: none; } html { scroll-behavior: auto; } }
+
+    /* ---------- thẻ tính năng ---------- */
+    .feat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 30px 0 10px; }
+    .card { border-radius: 18px; border: 1px solid var(--card-b); background: var(--card); padding: 22px; box-shadow: 0 10px 34px rgba(0,0,0,.25); }
+    .feat .card { display: flex; gap: 14px; align-items: flex-start; }
+    .feat .ic { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 1.5rem; background: rgba(139,125,255,.18); border: 1px solid var(--card-b); }
+    .feat h3 { margin: 0 0 4px; font-size: 1.05rem; } .feat p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+    /* ---------- tiêu đề mục ---------- */
+    section { padding: 54px 0 6px; }
+    .sec-t { display: flex; align-items: center; gap: 14px; margin: 0 0 8px; font-size: 1.7rem; }
+    .sec-t::before { content: ""; width: 6px; height: 30px; border-radius: 4px; background: linear-gradient(#a78bfa, #38bdf8); }
+    .sec-s { color: var(--muted); margin: 0 0 24px; }
+
+    /* ---------- 5 đặc tính NIST ---------- */
+    .nist { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px 18px; padding-top: 10px; }
+    .nist .card { position: relative; padding-top: 28px; }
+    .nist .num { position: absolute; top: -16px; left: 22px; width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; background: var(--btn); box-shadow: 0 6px 20px rgba(99,102,241,.5); }
+    .nist h3 { margin: 0 0 6px; font-size: 1.2rem; }
+    .nist .def { color: var(--muted); margin: 0 0 12px; font-size: .93rem; }
+    .nist .ev { margin: 0; padding-top: 12px; border-top: 1px dashed var(--line); font-size: .95rem; }
+    .nist .ev b { color: var(--ok); }
+
+    /* ---------- biểu đồ thời gian ---------- */
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px; }
+    .kpi b { display: block; font-size: 2rem; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 1.2; }
+    .kpi span { color: var(--muted); font-size: .92rem; }
+    .chart { display: flex; align-items: flex-end; gap: 12px; height: 220px; padding: 10px 6px 0; }
+    .chart .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+    .chart .bar { width: 100%; max-width: 46px; border-radius: 10px 10px 4px 4px; background: linear-gradient(180deg, #a78bfa, #6366f1 70%, #38bdf8); box-shadow: 0 0 18px rgba(139,92,246,.35); }
+    .chart .v { font-size: .72rem; color: var(--muted); margin-bottom: 6px; }
+    .chart .l { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+    details { margin-top: 16px; } summary { cursor: pointer; color: #c4b5fd; font-weight: 600; }
+
+    /* ---------- bảng ---------- */
+    .tw { overflow-x: auto; border-radius: 18px; border: 1px solid var(--card-b); background: var(--card); }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 640px; }
+    th, td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: rgba(139,92,246,.2); color: #e9e5ff; font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { font-weight: 700; color: #ddd6fe; width: 20%; }
     td.num { text-align: right; font-variant-numeric: tabular-nums; }
-    .stat { display: inline-block; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; margin: 4px 0; }
-    .stat b { font-size: 1.4rem; color: var(--accent); }
-    code { background: var(--soft); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; word-break: break-all; }
-    a { color: var(--accent); }
-    .note { color: var(--muted); font-size: 0.92rem; }
-    footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
-  </style>
-  <style>
+    .note { color: var(--muted); font-size: .92rem; }
+    .api li { margin: 6px 0; }
+
+    /* ---------- thư viện ảnh ---------- */
     .gallery { display: grid; grid-template-columns: 1fr; gap: 24px; }
-    .gallery figure { margin: 0; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: var(--soft); }
-    .gallery img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    .gallery figure { margin: 0; border-radius: 18px; border: 1px solid var(--card-b); background: var(--card); padding: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.3); }
+    .gallery img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); }
     .gallery figure.phone img { width: auto; max-width: 100%; max-height: 640px; margin: 0 auto; }
-    .gallery figcaption { font-size: 0.95rem; margin-top: 10px; }
+    .gallery figcaption { font-size: .95rem; margin: 12px 4px 2px; color: var(--muted); }
+    .gallery figcaption b { color: var(--fg); }
+
+    footer { margin-top: 70px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; text-align: center; }
+
+    @media (max-width: 900px) {
+      .hero .grid { grid-template-columns: 1fr; } .feat { grid-template-columns: 1fr 1fr; } .kpis { grid-template-columns: 1fr; }
+      .links { display: none; } .chip { margin-left: auto; } .term { transform: none; }
+    }
+    @media (max-width: 560px) { .feat { grid-template-columns: 1fr; } .art { min-height: 340px; } }
   </style>
 </head>
 <body>
-<main>
-  <h1>TDMU Notes API - Bài 1: Đặc tính điện toán đám mây NIST</h1>
-  <p class="sub">Thực hành Điện toán đám mây (LING270) · Sinh viên: Lưu Lý Công</p>
 
-  <h2>5 đặc tính thiết yếu theo NIST</h2>
-  <div class="table-wrap">
-  <table>
-    <thead>
-      <tr><th>Đặc tính</th><th>Định nghĩa ngắn</th><th>Bằng chứng từ bài lab</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Tự phục vụ theo nhu cầu</td>
-        <td>Người dùng tự xin tài nguyên tính toán khi cần, không phải nhờ ai cấp phát thủ công.</td>
-        <td>Tạo repo <code>notes-api-2324802010011</code> từ template của lớp, rồi tự bấm mở một Codespace trên GitHub. Máy ảo có 2 vCPU và khoảng 8 GB RAM được cấp ngay, không phải gửi yêu cầu cho quản trị viên.</td>
-      </tr>
-      <tr>
-        <td>Truy cập mạng rộng</td>
-        <td>Dịch vụ dùng được qua mạng bằng các thiết bị và giao thức chuẩn (trình duyệt, HTTP).</td>
-        <td>Codespace mở được ngay trong trình duyệt hoặc VS Code. API chạy ở cổng 3000 và được chuyển tiếp ra URL HTTPS dạng <code>*-3000.app.github.dev</code>. Trang này phục vụ qua GitHub Pages.</td>
-      </tr>
-      <tr>
-        <td>Gộp tài nguyên</td>
-        <td>Nhà cung cấp gom tài nguyên vật lý thành một khối, rồi chia động cho nhiều người dùng.</td>
-        <td>API trả về hostname <code>codespaces-0375bf</code> (codespace hiện tại; số đo lấy từ codespace trước có hostname khác), và nhân Linux là <code>6.8.0-1064-azure</code>. Codespace chạy trên hạ tầng Azure dùng chung, và người dùng không biết máy chủ vật lý nằm ở đâu.</td>
-      </tr>
-      <tr>
-        <td>Co giãn nhanh</td>
-        <td>Tài nguyên tăng hoặc giảm nhanh theo nhu cầu, trông như vô hạn với người dùng.</td>
-        <td>Codespace được tạo và dừng theo nhu cầu. Có thể đổi loại máy (số core) hoặc xóa đi tạo lại mà không phải mua phần cứng. Cài thêm Node 22 và gói <code>express</code> chỉ mất vài giây.</td>
-      </tr>
-      <tr>
-        <td>Đo lường được</td>
-        <td>Mức sử dụng tài nguyên được đo, theo dõi và tính phí minh bạch.</td>
-        <td>GitHub tính Codespaces theo core-giờ (gói miễn phí là 120 core-giờ/tháng). Endpoint <code>/health</code> trả về <code>uptime_seconds</code>, và thời gian phản hồi của API đã được đo bằng <code>curl</code> (xem mục Số liệu).</td>
-      </tr>
-    </tbody>
-  </table>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="logo">☁</span><span>Hello <span class="g">Cloud</span></span></a>
+    <nav class="links">
+      <a class="on" href="#top">Trang chủ</a>
+      <a href="#nist">5 đặc tính NIST</a>
+      <a href="#so-lieu">Số liệu</a>
+      <a href="#so-sanh">So sánh</a>
+      <a href="#minh-chung">Minh chứng</a>
+    </nav>
+    <span class="chip">LING270 · Bài 1</span>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ========== HERO ========== -->
+  <div class="hero">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <span class="pill">Thực hành Điện toán đám mây ✨</span>
+          <h1>Lập trình trên máy&nbsp;ảo <span class="g">đám&nbsp;mây</span> đầu&nbsp;tiên</h1>
+          <p class="lead">API "Hello Cloud" viết bằng Node.js và Express, chạy trên GitHub Codespaces, rồi đối chiếu những gì đã làm với 5 đặc tính điện toán đám mây của NIST. Sinh viên: Lưu Lý Công · MSSV 2324802010011.</p>
+          <div class="btns">
+            <a class="btn p" href="#nist">▶ Xem 5 đặc tính NIST</a>
+            <a class="btn o" href="#minh-chung">▣ Xem minh chứng</a>
+          </div>
+          <div class="stats">
+            <div><span class="ic">⚙</span><span><b>2 vCPU</b><small>7,8 GB RAM</small></span></div>
+            <div><span class="ic">⏱</span><span><b>≈ 1,24 ms</b><small>phản hồi (localhost)</small></span></div>
+            <div><span class="ic">✓</span><span><b>5 / 5</b><small>đặc tính NIST</small></span></div>
+          </div>
+        </div>
+
+        <div class="art" aria-hidden="true">
+          <div class="term">
+            <div class="bar"><i style="background:#f87171"></i><i style="background:#fbbf24"></i><i style="background:#34d399"></i><span style="margin-left:8px">GET /  ·  codespace</span></div>
+<pre><span class="c">// phản hồi thật từ Codespace</span>
+{
+  <span class="k">"message"</span>: <span class="s">"Xin chào từ đám mây!"</span>,
+  <span class="k">"host"</span>: <span class="s">"codespaces-fa6c08"</span>,
+  <span class="k">"platform"</span>: <span class="s">"Linux 6.8.0-1064-azure"</span>,
+  <span class="k">"cpus"</span>: <span class="n">2</span>,
+  <span class="k">"memoryGB"</span>: <span class="n">7.8</span>
+}</pre>
+          </div>
+          <span class="float a">Node.js</span>
+          <span class="float b">Express</span>
+          <span class="float c">Codespaces</span>
+          <span class="float d">GitHub Pages</span>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="card"><span class="ic">☁</span><div><h3>Máy ảo đám mây</h3><p>Codespace tự cấp, mở được ngay trên trình duyệt.</p></div></div>
+        <div class="card"><span class="ic">⌘</span><div><h3>API Express</h3><p><code>GET /</code>, <code>/health</code>, <code>/hello</code> kèm kiểm thử.</p></div></div>
+        <div class="card"><span class="ic">📶</span><div><h3>Truy cập từ xa</h3><p>Cổng 3000 mở bằng điện thoại 4G, rồi đặt lại Private.</p></div></div>
+        <div class="card"><span class="ic">$</span><div><h3>Đo lường chi phí</h3><p>Billing Usage: billed $0, trong hạn mức miễn phí.</p></div></div>
+      </div>
+    </div>
   </div>
 
-  <h2>Số liệu</h2>
-  <p>Đo 10 lần bằng lệnh <code>curl -s -o /dev/null -w "%{time_total}\n" http://localhost:3000/hello</code>, chạy ngay trong Codespace ngày 29/10/2026.</p>
-  <div class="stat">Thời gian phản hồi trung bình: <b>0.001 s</b> (≈ 1.24 ms)</div>
-  <div class="table-wrap">
-  <table>
-    <thead><tr><th>Lần</th><th>time_total (s)</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td class="num">0.001298</td></tr>
-      <tr><td>2</td><td class="num">0.001011</td></tr>
-      <tr><td>3</td><td class="num">0.001049</td></tr>
-      <tr><td>4</td><td class="num">0.001043</td></tr>
-      <tr><td>5</td><td class="num">0.000814</td></tr>
-      <tr><td>6</td><td class="num">0.001629</td></tr>
-      <tr><td>7</td><td class="num">0.002236</td></tr>
-      <tr><td>8</td><td class="num">0.000753</td></tr>
-      <tr><td>9</td><td class="num">0.001811</td></tr>
-      <tr><td>10</td><td class="num">0.000741</td></tr>
-      <tr><th>Trung bình</th><th class="num">0.001</th></tr>
-    </tbody>
-  </table>
+  <div class="wrap">
+    <!-- ========== 5 ĐẶC TÍNH NIST ========== -->
+    <section id="nist">
+      <h2 class="sec-t">5 đặc tính thiết yếu theo NIST</h2>
+      <p class="sec-s">Mỗi đặc tính ghép với một thao tác đã làm trong bài lab.</p>
+      <div class="nist">
+        <article class="card"><span class="num">1</span>
+          <h3>Tự phục vụ theo nhu cầu</h3>
+          <p class="def">Người dùng tự xin tài nguyên tính toán khi cần, không phải nhờ ai cấp phát thủ công.</p>
+          <p class="ev"><b>Bằng chứng:</b> Tạo repo <code>notes-api-2324802010011</code> từ template của lớp, rồi tự bấm mở một Codespace trên GitHub. Máy ảo có 2 vCPU và khoảng 8 GB RAM được cấp ngay, không phải gửi yêu cầu cho quản trị viên.</p>
+        </article>
+        <article class="card"><span class="num">2</span>
+          <h3>Truy cập mạng rộng</h3>
+          <p class="def">Dịch vụ dùng được qua mạng bằng các thiết bị và giao thức chuẩn (trình duyệt, HTTP).</p>
+          <p class="ev"><b>Bằng chứng:</b> Codespace mở được ngay trong trình duyệt hoặc VS Code. API chạy ở cổng 3000 và được chuyển tiếp ra URL HTTPS dạng <code>*-3000.app.github.dev</code>; đã mở thành công trên điện thoại 4G. Trang này phục vụ qua GitHub Pages.</p>
+        </article>
+        <article class="card"><span class="num">3</span>
+          <h3>Gộp tài nguyên</h3>
+          <p class="def">Nhà cung cấp gom tài nguyên vật lý thành một khối, rồi chia động cho nhiều người dùng.</p>
+          <p class="ev"><b>Bằng chứng:</b> API trả về hostname <code>codespaces-fa6c08</code> (codespace lần này); codespace trước đó có hostname khác (<code>codespaces-0375bf</code>). Nhân Linux là <code>6.8.0-1064-azure</code>: Codespace chạy trên hạ tầng Azure dùng chung, và người dùng không biết máy chủ vật lý nằm ở đâu.</p>
+        </article>
+        <article class="card"><span class="num">4</span>
+          <h3>Co giãn nhanh</h3>
+          <p class="def">Tài nguyên tăng hoặc giảm nhanh theo nhu cầu, trông như vô hạn với người dùng.</p>
+          <p class="ev"><b>Bằng chứng:</b> Codespace được tạo và dừng theo nhu cầu. Có thể đổi loại máy (số core) hoặc xóa đi tạo lại mà không phải mua phần cứng. Cài thêm Node 22 và gói <code>express</code> chỉ mất vài giây.</p>
+        </article>
+        <article class="card"><span class="num">5</span>
+          <h3>Đo lường được</h3>
+          <p class="def">Mức sử dụng tài nguyên được đo, theo dõi và tính phí minh bạch.</p>
+          <p class="ev"><b>Bằng chứng:</b> GitHub tính Codespaces theo core-giờ (gói miễn phí là 120 core-giờ/tháng). Endpoint <code>/health</code> trả về <code>uptime_seconds</code>, và thời gian phản hồi của API được đo bằng <code>curl</code> (xem mục Số liệu).</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========== SỐ LIỆU ========== -->
+    <section id="so-lieu">
+      <h2 class="sec-t">Số liệu</h2>
+      <p class="sec-s">Đo 10 lần bằng lệnh <code>curl -s -o /dev/null -w "%{time_total}\n" http://localhost:3000/hello</code>, chạy ngay trong Codespace ngày 29/10/2026.</p>
+      <div class="kpis">
+        <div class="card kpi"><b>0,001 s</b><span>Thời gian phản hồi trung bình (≈ 1,24 ms)</span></div>
+        <div class="card kpi"><b>0,741 ms</b><span>Lần nhanh nhất (lần 10)</span></div>
+        <div class="card kpi"><b>2,236 ms</b><span>Lần chậm nhất (lần 7)</span></div>
+      </div>
+      <div class="card">
+        <div class="chart" id="chart"></div>
+        <details>
+          <summary>Xem bảng số liệu chi tiết</summary>
+          <div class="tw" style="margin-top:12px">
+            <table style="min-width:0">
+              <thead><tr><th>Lần</th><th class="num">time_total (s)</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td class="num">0.001298</td></tr>
+                <tr><td>2</td><td class="num">0.001011</td></tr>
+                <tr><td>3</td><td class="num">0.001049</td></tr>
+                <tr><td>4</td><td class="num">0.001043</td></tr>
+                <tr><td>5</td><td class="num">0.000814</td></tr>
+                <tr><td>6</td><td class="num">0.001629</td></tr>
+                <tr><td>7</td><td class="num">0.002236</td></tr>
+                <tr><td>8</td><td class="num">0.000753</td></tr>
+                <tr><td>9</td><td class="num">0.001811</td></tr>
+                <tr><td>10</td><td class="num">0.000741</td></tr>
+                <tr><th>Trung bình</th><th class="num">0.001</th></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+      <p class="note">Đây là thời gian đo qua localhost, tức là bên trong máy Codespace, nên không tính độ trễ Internet. Nếu gọi qua URL công khai thì số đo sẽ lớn hơn.</p>
+
+      <h3 style="margin-top:30px">API</h3>
+      <ul class="api">
+        <li><code>GET /</code>: JSON gồm <code>message</code>, <code>host</code>, <code>platform</code>, <code>cpus</code>, <code>memoryGB</code>, <code>uptimeSec</code>, <code>time</code></li>
+        <li><code>GET /health</code>: trạng thái và thời gian server đã chạy (giây)</li>
+        <li><code>GET /hello</code>: lời chào, hostname và thời gian hiện tại</li>
+      </ul>
+      <p class="note">URL API có dạng <code>https://&lt;tên-codespace&gt;-3000.app.github.dev</code>, đổi khi Codespace được tạo lại, và chỉ truy cập được khi Codespace đang chạy, server đã bật bằng <code>npm start</code>, và cổng 3000 trong tab PORTS đang để chế độ <b>Public</b>. Hiện cổng đã đặt lại Private và Codespace đã dừng.</p>
+    </section>
+
+    <!-- ========== SO SÁNH ========== -->
+    <section id="so-sanh">
+      <h2 class="sec-t">So sánh: máy cá nhân và Codespace</h2>
+      <p class="sec-s">Số liệu thực tế đo ngày 05/11/2026 (giờ Việt Nam).</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Tiêu chí</th><th>Máy cá nhân</th><th>Codespace</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Thời gian từ lúc bắt đầu đến khi chạy được <code>node -v</code></td>
+              <td>Node đã được cài sẵn từ trước nên <code>node -v</code> chạy ngay (v20.17.0). Thời gian cài mới từ đầu không được đo trong bài này.</td>
+              <td>Bấm Create codespace lúc 14:07:08; terminal hiện ra lúc 14:11:16 (khoảng 4 phút 8 giây); terminal nhận lệnh và chạy được <code>node -v</code> lúc 14:12:21 (khoảng 5 phút 13 giây), cho kết quả v22.23.4. Đây là lần dựng đầu nên lâu, vì phải build image có Java và Docker.</td>
+            </tr>
+            <tr>
+              <td>Số CPU, RAM (từ API)</td>
+              <td>Intel Core i5-11400H, 12 luồng, 15,7 GB RAM (đọc từ thông tin hệ thống của máy).</td>
+              <td><code>cpus: 2</code>, <code>memoryGB: 7.8</code> (kết quả <code>GET /</code>, host <code>codespaces-fa6c08</code>).</td>
+            </tr>
+            <tr>
+              <td>Hệ điều hành</td>
+              <td>Windows 11 Home Single Language, bản 10.0.22631.</td>
+              <td>Debian GNU/Linux 13 (trixie), nhân Linux 6.8.0-1064-azure (container chạy trên máy ảo Azure).</td>
+            </tr>
+            <tr>
+              <td>Cách truy cập từ thiết bị khác</td>
+              <td>Phải cùng mạng LAN, biết IP nội bộ, mở cổng trên tường lửa; muốn ra Internet phải cấu hình router hoặc dùng tunnel.</td>
+              <td>Cổng 3000 được chuyển tiếp thành URL HTTPS dạng <code>https://&lt;tên&gt;-3000.app.github.dev</code>. Mặc định là Private; đã đổi sang Public, truy cập từ bên ngoài không cần đăng nhập (HTTP 200), rồi đặt lại Private (người ngoài bị chuyển tới trang đăng nhập, HTTP 302).</td>
+            </tr>
+            <tr>
+              <td>Chi phí, đo bằng gì</td>
+              <td>Điện năng và khấu hao máy; không có công cụ đo sẵn trong bài.</td>
+              <td>Settings, Billing, Usage (ngày 05/11/2026): Codespaces storage 0,6 GB-tháng, gross $0,04, billed $0; Actions Linux 22 phút, gross $0,13, billed $0. Số core-giờ tính toán của codespace chưa hiện lúc chụp vì dữ liệu billing cập nhật chậm; ước tính codespace chạy khoảng 10 phút với 2 core, tức khoảng 0,3 core-giờ, nằm trong hạn mức miễn phí 120 core-giờ mỗi tháng.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== MINH CHỨNG ========== -->
+    <section id="minh-chung">
+      <h2 class="sec-t">Minh chứng bằng ảnh chụp</h2>
+      <p class="sec-s">Ảnh chụp màn hình các bước thực hiện ngày 05/11/2026. Bấm vào ảnh để xem cỡ lớn.</p>
+      <div class="gallery">
+        <figure>
+          <a href="images/01-codespace-san-sang.jpg"><img src="images/01-codespace-san-sang.jpg" alt="Codespace đã kết nối" loading="lazy"></a>
+          <figcaption><b>Codespace đã kết nối.</b> VS Code trên trình duyệt đã kết nối codespace ubiquitous-space-acorn (thanh trạng thái phía dưới bên trái). Bấm tạo lúc 14:07:08, terminal hiện lúc 14:11:16, chạy được node -v lúc 14:12:21 (giờ Việt Nam, 05/11/2026).</figcaption>
+        </figure>
+        <figure>
+          <a href="images/02-npm-test-va-api.jpg"><img src="images/02-npm-test-va-api.jpg" alt="npm test đạt và GET / trả JSON" loading="lazy"></a>
+          <figcaption><b>npm test đạt và GET / trả JSON.</b> npm test: 1 test đạt, 0 lỗi. Sau npm start, curl localhost:3000 trả JSON có host codespaces-fa6c08, cpus 2, memoryGB 7.8 trên Debian 13.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/03-cong-3000-private.jpg"><img src="images/03-cong-3000-private.jpg" alt="Cổng 3000 ở chế độ Private" loading="lazy"></a>
+          <figcaption><b>Cổng 3000 ở chế độ Private.</b> Tab Ports: cổng 3000 chạy tiến trình node src/server.js, khả năng hiển thị là Private (mặc định).</figcaption>
+        </figure>
+        <figure>
+          <a href="images/04-cong-3000-public.jpg"><img src="images/04-cong-3000-public.jpg" alt="Đổi cổng 3000 sang Public" loading="lazy"></a>
+          <figcaption><b>Đổi cổng 3000 sang Public.</b> Sau khi chọn Port Visibility, Public. Kiểm tra từ bên ngoài không cần đăng nhập, kết quả HTTP 200.</figcaption>
+        </figure>
+        <figure class="phone">
+          <a href="images/05-dien-thoai-4g.jpg"><img src="images/05-dien-thoai-4g.jpg" alt="Mở bằng điện thoại (4G)" loading="lazy"></a>
+          <figcaption><b>Mở bằng điện thoại (4G).</b> Điện thoại dùng mạng 4G mở URL dạng *-3000.app.github.dev và thấy JSON: host codespaces-fa6c08, cpus 2, memoryGB 7.8.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/06-cong-ve-private.jpg"><img src="images/06-cong-ve-private.jpg" alt="Đặt lại cổng về Private" loading="lazy"></a>
+          <figcaption><b>Đặt lại cổng về Private.</b> Sau khi thử xong, cổng 3000 được đặt lại Private. Gọi lại từ bên ngoài bị chuyển sang trang đăng nhập (HTTP 302).</figcaption>
+        </figure>
+        <figure>
+          <a href="images/07-billing-usage.jpg"><img src="images/07-billing-usage.jpg" alt="Trang Billing Usage" loading="lazy"></a>
+          <figcaption><b>Trang Billing Usage.</b> Settings, Billing, Usage ngày 05/11/2026: Codespaces storage 0,6 GB-tháng (gross $0,04, billed $0) và Actions Linux 22 phút (gross $0,13, billed $0). Số core-giờ tính toán chưa hiện do dữ liệu billing cập nhật chậm.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/08-stop-codespace.jpg"><img src="images/08-stop-codespace.jpg" alt="Stop codespace" loading="lazy"></a>
+          <figcaption><b>Stop codespace.</b> Thông báo codespace đã dừng ("stopped") trên trang github.com/codespaces.</figcaption>
+        </figure>
+      </div>
+    </section>
   </div>
-  <p class="note">Đây là thời gian đo qua localhost, tức là bên trong máy Codespace, nên không tính độ trễ Internet. Nếu gọi qua URL công khai thì số đo sẽ lớn hơn.</p>
 
-  <h2>API</h2>
-  <p>URL API: <a href="https://nightmarish-spooky-skeleton-v6jg54v6564wf66w-3000.app.github.dev">https://nightmarish-spooky-skeleton-v6jg54v6564wf66w-3000.app.github.dev</a></p>
-  <ul>
-    <li><code>GET /</code>: lời chào và tên dịch vụ</li>
-    <li><code>GET /health</code>: trạng thái và thời gian server đã chạy (giây)</li>
-    <li><code>GET /hello</code>: lời chào, hostname và thời gian hiện tại</li>
-  </ul>
-  <p class="note">URL này có thể đổi nếu Codespace được tạo lại, và chỉ truy cập được khi Codespace đang chạy, server đã được bật bằng <code>npm start</code>, và cổng 3000 trong tab PORTS đang để chế độ <b>Public</b>.</p>
-
-  <footer>Trang tĩnh phục vụ bởi GitHub Pages từ thư mục <code>/docs</code> của nhánh <code>main</code>.</footer>
-  <h2>So sánh: máy cá nhân và Codespace</h2>
-  <div class="table-wrap">
-  <table>
-    <thead>
-      <tr><th>Tiêu chí</th><th>Máy cá nhân</th><th>Codespace</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Thời gian từ lúc bắt đầu đến khi chạy được <code>node -v</code></td>
-        <td>Node đã được cài sẵn từ trước nên <code>node -v</code> chạy ngay (v20.17.0). Thời gian cài mới từ đầu không được đo trong bài này.</td>
-        <td>Mốc thời gian (giờ Việt Nam, ngày 05/11/2026): bấm Create codespace lúc 14:07:08; terminal hiện ra lúc 14:11:16 (khoảng 4 phút 8 giây); terminal nhận lệnh và chạy được <code>node -v</code> lúc 14:12:21 (khoảng 5 phút 13 giây), cho kết quả v22.23.4. Đây là lần dựng đầu nên lâu, vì phải build image có Java và Docker.</td>
-      </tr>
-      <tr>
-        <td>Số CPU, RAM (từ API)</td>
-        <td>Intel Core i5-11400H, 12 luồng, 15,7 GB RAM (đọc từ thông tin hệ thống của máy).</td>
-        <td><code>cpus: 2</code>, <code>memoryGB: 7.8</code> (kết quả <code>GET /</code>, host <code>codespaces-fa6c08</code>).</td>
-      </tr>
-      <tr>
-        <td>Hệ điều hành</td>
-        <td>Windows 11 Home Single Language, bản 10.0.22631.</td>
-        <td>Debian GNU/Linux 13 (trixie), nhân Linux 6.8.0-1064-azure (container chạy trên máy ảo Azure).</td>
-      </tr>
-      <tr>
-        <td>Cách truy cập từ thiết bị khác</td>
-        <td>Phải cùng mạng LAN, biết IP nội bộ, mở cổng trên tường lửa; muốn ra Internet phải cấu hình router hoặc dùng tunnel.</td>
-        <td>Cổng 3000 được chuyển tiếp thành URL HTTPS dạng <code>https://&lt;tên&gt;-3000.app.github.dev</code>. Mặc định là Private; đã đổi sang Public, truy cập từ bên ngoài không cần đăng nhập (HTTP 200), rồi đặt lại Private (người ngoài bị chuyển tới trang đăng nhập, HTTP 302).</td>
-      </tr>
-      <tr>
-        <td>Chi phí, đo bằng gì</td>
-        <td>Điện năng và khấu hao máy; không có công cụ đo sẵn trong bài.</td>
-        <td>Settings, Billing, Usage (ngày 05/11/2026): Codespaces storage 0,6 GB-tháng, gross $0,04, billed $0; Actions Linux 22 phút, gross $0,13, billed $0. Số core-giờ tính toán của codespace chưa hiện lúc chụp vì dữ liệu billing cập nhật chậm; ước tính codespace chạy khoảng 10 phút với 2 core, tức khoảng 0,3 core-giờ, nằm trong hạn mức miễn phí 120 core-giờ mỗi tháng.</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
-
-  <h2>Minh chứng bằng ảnh chụp</h2>
-  <p class="note">Ảnh chụp màn hình các bước thực hiện ngày 05/11/2026. Bấm vào ảnh để xem cỡ lớn.</p>
-  <div class="gallery">
-    <figure>
-      <a href="images/01-codespace-san-sang.jpg"><img src="images/01-codespace-san-sang.jpg" alt="Codespace đã kết nối" loading="lazy"></a>
-      <figcaption><b>Codespace đã kết nối.</b> VS Code trên trình duyệt đã kết nối codespace ubiquitous-space-acorn (thanh trạng thái phía dưới bên trái). Bấm tạo lúc 14:07:08, terminal hiện lúc 14:11:16, chạy được node -v lúc 14:12:21 (giờ Việt Nam, 05/11/2026).</figcaption>
-    </figure>
-    <figure>
-      <a href="images/02-npm-test-va-api.jpg"><img src="images/02-npm-test-va-api.jpg" alt="npm test đạt và GET / trả JSON" loading="lazy"></a>
-      <figcaption><b>npm test đạt và GET / trả JSON.</b> npm test: 1 test đạt, 0 lỗi. Sau npm start, curl localhost:3000 trả JSON có host codespaces-fa6c08, cpus 2, memoryGB 7.8 trên Debian 13.</figcaption>
-    </figure>
-    <figure>
-      <a href="images/03-cong-3000-private.jpg"><img src="images/03-cong-3000-private.jpg" alt="Cổng 3000 ở chế độ Private" loading="lazy"></a>
-      <figcaption><b>Cổng 3000 ở chế độ Private.</b> Tab Ports: cổng 3000 chạy tiến trình node src/server.js, khả năng hiển thị là Private (mặc định).</figcaption>
-    </figure>
-    <figure>
-      <a href="images/04-cong-3000-public.jpg"><img src="images/04-cong-3000-public.jpg" alt="Đổi cổng 3000 sang Public" loading="lazy"></a>
-      <figcaption><b>Đổi cổng 3000 sang Public.</b> Sau khi chọn Port Visibility, Public. Kiểm tra từ bên ngoài không cần đăng nhập, kết quả HTTP 200.</figcaption>
-    </figure>
-    <figure class="phone">
-      <a href="images/05-dien-thoai-4g.jpg"><img src="images/05-dien-thoai-4g.jpg" alt="Mở bằng điện thoại (4G)" loading="lazy"></a>
-      <figcaption><b>Mở bằng điện thoại (4G).</b> Điện thoại dùng mạng 4G mở URL dạng *-3000.app.github.dev và thấy JSON: host codespaces-fa6c08, cpus 2, memoryGB 7.8.</figcaption>
-    </figure>
-    <figure>
-      <a href="images/06-cong-ve-private.jpg"><img src="images/06-cong-ve-private.jpg" alt="Đặt lại cổng về Private" loading="lazy"></a>
-      <figcaption><b>Đặt lại cổng về Private.</b> Sau khi thử xong, cổng 3000 được đặt lại Private. Gọi lại từ bên ngoài bị chuyển sang trang đăng nhập (HTTP 302).</figcaption>
-    </figure>
-    <figure>
-      <a href="images/07-billing-usage.jpg"><img src="images/07-billing-usage.jpg" alt="Trang Billing Usage" loading="lazy"></a>
-      <figcaption><b>Trang Billing Usage.</b> Settings, Billing, Usage ngày 05/11/2026: Codespaces storage 0,6 GB-tháng (gross $0,04, billed $0) và Actions Linux 22 phút (gross $0,13, billed $0). Số core-giờ tính toán chưa hiện do dữ liệu billing cập nhật chậm.</figcaption>
-    </figure>
-    <figure>
-      <a href="images/08-stop-codespace.jpg"><img src="images/08-stop-codespace.jpg" alt="Stop codespace" loading="lazy"></a>
-      <figcaption><b>Stop codespace.</b> Thông báo codespace đã dừng ("stopped") trên trang github.com/codespaces.</figcaption>
-    </figure>
-  </div>
-
+  <footer>
+    <div class="wrap">Lưu Lý Công · MSSV 2324802010011 · Thực hành Điện toán đám mây (LING270)<br>
+    Trang tĩnh phục vụ bởi GitHub Pages từ thư mục <code>/docs</code> của nhánh <code>main</code> ·
+    <a href="https://github.com/LuuLyCong/notes-api-2324802010011">Mã nguồn trên GitHub</a></div>
+  </footer>
 </main>
+
+<script>
+  // Biểu đồ cột từ 10 số đo thật (giây)
+  var t = [0.001298,0.001011,0.001049,0.001043,0.000814,0.001629,0.002236,0.000753,0.001811,0.000741];
+  var max = Math.max.apply(null, t), box = document.getElementById('chart');
+  t.forEach(function (v, i) {
+    var c = document.createElement('div'); c.className = 'col';
+    c.innerHTML = '<span class="v">' + (v * 1000).toFixed(2) + '</span><div class="bar" style="height:' + Math.round(v / max * 150) + 'px"></div><span class="l">Lần ' + (i + 1) + '</span>';
+    box.appendChild(c);
+  });
+  // Làm nổi mục menu theo vị trí cuộn
+  var links = document.querySelectorAll('.links a'), ids = ['top','nist','so-lieu','so-sanh','minh-chung'];
+  function mark() {
+    var cur = 'top';
+    ids.forEach(function (id) { var e = document.getElementById(id); if (e && id !== 'top' && e.getBoundingClientRect().top <= 140) cur = id; });
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', mark, { passive: true }); mark();
+</script>
 </body>
 </html>
