@@ -24,6 +24,12 @@
     .note { color: var(--muted); font-size: 0.92rem; }
     footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
   </style>
+  <style>
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .gallery figure { margin: 0; border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: var(--soft); }
+    .gallery img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    .gallery figcaption { font-size: 0.88rem; margin-top: 8px; }
+  </style>
 </head>
 <body>
 <main>
@@ -133,6 +139,43 @@
       </tr>
     </tbody>
   </table>
+  </div>
+
+  <h2>Minh chứng bằng ảnh chụp</h2>
+  <p class="note">Ảnh chụp màn hình các bước thực hiện ngày 05/11/2026. Bấm vào ảnh để xem cỡ lớn.</p>
+  <div class="gallery">
+    <figure>
+      <a href="images/01-codespace-san-sang.jpg"><img src="images/01-codespace-san-sang.jpg" alt="Codespace đã kết nối" loading="lazy"></a>
+      <figcaption><b>Codespace đã kết nối.</b> VS Code trên trình duyệt đã kết nối codespace ubiquitous-space-acorn (thanh trạng thái phía dưới bên trái). Bấm tạo lúc 14:07:08, terminal hiện lúc 14:11:16, chạy được node -v lúc 14:12:21 (giờ Việt Nam, 05/11/2026).</figcaption>
+    </figure>
+    <figure>
+      <a href="images/02-npm-test-va-api.jpg"><img src="images/02-npm-test-va-api.jpg" alt="npm test đạt và GET / trả JSON" loading="lazy"></a>
+      <figcaption><b>npm test đạt và GET / trả JSON.</b> npm test: 1 test đạt, 0 lỗi. Sau npm start, curl localhost:3000 trả JSON có host codespaces-fa6c08, cpus 2, memoryGB 7.8 trên Debian 13.</figcaption>
+    </figure>
+    <figure>
+      <a href="images/03-cong-3000-private.jpg"><img src="images/03-cong-3000-private.jpg" alt="Cổng 3000 ở chế độ Private" loading="lazy"></a>
+      <figcaption><b>Cổng 3000 ở chế độ Private.</b> Tab Ports: cổng 3000 chạy tiến trình node src/server.js, khả năng hiển thị là Private (mặc định).</figcaption>
+    </figure>
+    <figure>
+      <a href="images/04-cong-3000-public.jpg"><img src="images/04-cong-3000-public.jpg" alt="Đổi cổng 3000 sang Public" loading="lazy"></a>
+      <figcaption><b>Đổi cổng 3000 sang Public.</b> Sau khi chọn Port Visibility, Public. Kiểm tra từ bên ngoài không cần đăng nhập, kết quả HTTP 200.</figcaption>
+    </figure>
+    <figure>
+      <a href="images/05-dien-thoai-4g.jpg"><img src="images/05-dien-thoai-4g.jpg" alt="Mở bằng điện thoại (4G)" loading="lazy"></a>
+      <figcaption><b>Mở bằng điện thoại (4G).</b> Điện thoại dùng mạng 4G mở URL dạng *-3000.app.github.dev và thấy JSON: host codespaces-fa6c08, cpus 2, memoryGB 7.8.</figcaption>
+    </figure>
+    <figure>
+      <a href="images/06-cong-ve-private.jpg"><img src="images/06-cong-ve-private.jpg" alt="Đặt lại cổng về Private" loading="lazy"></a>
+      <figcaption><b>Đặt lại cổng về Private.</b> Sau khi thử xong, cổng 3000 được đặt lại Private. Gọi lại từ bên ngoài bị chuyển sang trang đăng nhập (HTTP 302).</figcaption>
+    </figure>
+    <figure>
+      <a href="images/07-billing-usage.jpg"><img src="images/07-billing-usage.jpg" alt="Trang Billing Usage" loading="lazy"></a>
+      <figcaption><b>Trang Billing Usage.</b> Settings, Billing, Usage ngày 05/11/2026: Codespaces storage 0,6 GB-tháng (gross $0,04, billed $0) và Actions Linux 22 phút (gross $0,13, billed $0). Số core-giờ tính toán chưa hiện do dữ liệu billing cập nhật chậm.</figcaption>
+    </figure>
+    <figure>
+      <a href="images/08-stop-codespace.jpg"><img src="images/08-stop-codespace.jpg" alt="Stop codespace" loading="lazy"></a>
+      <figcaption><b>Stop codespace.</b> Thông báo codespace đã dừng ("stopped") trên trang github.com/codespaces.</figcaption>
+    </figure>
   </div>
 
 </main>
