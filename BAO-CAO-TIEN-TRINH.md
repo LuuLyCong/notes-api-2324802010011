@@ -33,7 +33,7 @@ Mục tiêu theo rubric (10 điểm):
 | `git status` | `On branch main`, `nothing to commit, working tree clean` |
 | `git branch --show-current` | `main` |
 | `echo $CODESPACE_NAME` | codespace trước (đã bỏ) |
-| `git remote -v` | `origin https://github.com/LuuLyCong/tdmu-cloud-lab-LuuLyCong` (fetch/push) |
+| `git remote -v` | `origin https://github.com/LuuLyCong/notes-api-2324802010011` (fetch/push) |
 
 Hệ điều hành của container là **Alpine Linux 3.23.7 (musl libc)**, kernel `6.8.0-1064-azure`, 2 vCPU, ~8 GB RAM. Image này không phải `mcr.microsoft.com/devcontainers/javascript-node:22` như `devcontainer.json` khai báo.
 
