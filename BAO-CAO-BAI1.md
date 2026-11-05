@@ -1,10 +1,10 @@
 # Báo cáo Bài 1: TDMU Notes API - Đặc tính điện toán đám mây NIST
 
 - Môn: Thực hành Điện toán đám mây (LING270)
-- Sinh viên: Lưu Lý Công
-- Repo: https://github.com/LuuLyCong/tdmu-cloud-lab-LuuLyCong
+- Sinh viên: Lưu Lý Côngh
+- Repo: https://github.com/LuuLyCong/notes-api-2324802010011
 - API: https://nightmarish-spooky-skeleton-v6jg54v6564wf66w-3000.app.github.dev (cần Codespace đang chạy và cổng 3000 để Public)
-- Trang Pages: https://luulycong.github.io/tdmu-cloud-lab-LuuLyCong/ (sau khi bật Pages từ `main` `/docs`)
+- Trang Pages: https://luulycong.github.io/notes-api-2324802010011/ (sau khi bật Pages từ `main` `/docs`)
 
 ## 1. Số liệu thời gian phản hồi
 
