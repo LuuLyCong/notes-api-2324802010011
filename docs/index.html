@@ -124,6 +124,8 @@
     .gallery figcaption { font-size: .95rem; margin: 12px 4px 2px; color: var(--muted); }
     .gallery figcaption b { color: var(--fg); }
 
+    pre.code { background: rgba(0,0,0,.35); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font: .85rem/1.6 ui-monospace, Consolas, Menlo, monospace; color: #c7d2fe; }
+    pre.code .add { color: #86efac; } pre.code .del { color: #fca5a5; }
     footer { margin-top: 70px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; text-align: center; }
 
     @media (max-width: 900px) {
@@ -146,7 +148,7 @@
       <a href="#minh-chung">Minh chứng</a>
       <a href="#bai2">Bài 2</a>
     </nav>
-    <span class="chip">LING270 · Bài 1</span>
+    <span class="chip">LING270 · Bài 1, 2</span>
   </div>
 </header>
 
@@ -401,6 +403,23 @@
         </table>
       </div>
 
+      <h3 style="margin-top:30px">Chỗ sửa mã cho từng lần thí nghiệm</h3>
+      <p class="note">Mỗi lần chỉ đổi đúng một yếu tố trong <code>src/main/java/org/cloudsimplus/examples/BasicFirstExample.java</code>, rồi biên dịch lại (<code>mvn -DskipTests package</code>) trước khi chạy <code>sh bootstrap.sh org.cloudsimplus.examples.BasicFirstExample</code> (vì <code>bootstrap.sh</code> chỉ chạy lại JAR đã build).</p>
+<pre class="code"><span class="note">// Lần 1: nhân đôi số máy ảo</span>
+<span class="del">-    private static final int VMS = 2;</span>
+<span class="add">+    private static final int VMS = 4;</span>
+
+<span class="note">// Lần 2: nhân đôi số cloudlet</span>
+<span class="del">-    private static final int CLOUDLETS = 4;</span>
+<span class="add">+    private static final int CLOUDLETS = 8;</span>
+
+<span class="note">// Lần 3: đổi bộ lập lịch cloudlet sang SpaceShared (git diff: 1 file changed, 2 insertions)</span>
+<span class="add">+import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerSpaceShared;</span>
+ import org.cloudsimplus.vms.VmSimple;
+ ...
+         final var vm = VmSimple.of(VM_CAPACITY);
+<span class="add">+        vm.setCloudletScheduler(new CloudletSchedulerSpaceShared());</span></pre>
+
       <h3 style="margin-top:30px">Câu hỏi phản biện</h3>
       <div class="card" style="margin-bottom:16px">
         <p><b>1. Vì sao API trong container <code>notes2</code> vẫn báo <code>memoryGB</code> bằng RAM máy chủ dù đã giới hạn 128 MB?</b></p>
@@ -432,6 +451,8 @@
         <figure><a href="images/b2-10-cloudsim-4-lan.jpg"><img src="images/b2-10-cloudsim-4-lan.jpg" alt="Kết quả 4 lần chạy" loading="lazy"></a><figcaption><b>Kết quả bốn lần chạy.</b> Bảng cloudlet và thời điểm mô phỏng kết thúc của lần 0 đến lần 3 (20,22 s; 45,71 s; 40,22 s; 20,22 s).</figcaption></figure>
         <figure><a href="images/b2-11-cloudsim-canh-bao.jpg"><img src="images/b2-11-cloudsim-canh-bao.jpg" alt="Cảnh báo VM không đặt được" loading="lazy"></a><figcaption><b>Cảnh báo ở lần 1 và lần 2.</b> Lần 1: <code>No suitable host found for Vm 2/Vm 3</code>, Vm 2 và Vm 3 bị đưa vào danh sách lỗi. Lần 2: cảnh báo cloudlet 4 đến 7 thiếu VmRam.</figcaption></figure>
         <figure><a href="images/b2-12-cloudsim-lan-phu.jpg"><img src="images/b2-12-cloudsim-lan-phu.jpg" alt="Lần phụ SpaceShared 8 cloudlet" loading="lazy"></a><figcaption><b>Lần phụ: SpaceShared với 8 cloudlet.</b> Cả 8 cloudlet hoàn thành thành hai đợt (kết thúc 20,1 s và 40,3 s), mô phỏng dừng ở 40,44 s.</figcaption></figure>
+        <figure><a href="images/b2-14-sua-ma-diff.jpg"><img src="images/b2-14-sua-ma-diff.jpg" alt="Thống kê chỗ sửa mã" loading="lazy"></a><figcaption><b>Chỗ sửa mã ở lần 3.</b> <code>git diff --stat</code> báo <code>1 file changed, 2 insertions(+)</code>: thêm dòng <code>import ...CloudletSchedulerSpaceShared</code> và dòng <code>vm.setCloudletScheduler(new CloudletSchedulerSpaceShared())</code>; sau mỗi lần chạy tệp được khôi phục bằng <code>git checkout</code>.</figcaption></figure>
+        <figure><a href="images/b2-13-secret-cr-pat.jpg"><img src="images/b2-13-secret-cr-pat.jpg" alt="Secret CR_PAT" loading="lazy"></a><figcaption><b>Secret <code>CR_PAT</code>.</b> Settings, Codespaces, Secrets: secret <code>CR_PAT</code> chỉ cấp cho 1 repository (<code>notes-api-2324802010011</code>); giá trị token không hiển thị.</figcaption></figure>
       </div>
     </section>
   </div>
