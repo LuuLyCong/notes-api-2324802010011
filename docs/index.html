@@ -144,6 +144,7 @@
       <a href="#so-lieu">Số liệu</a>
       <a href="#so-sanh">So sánh</a>
       <a href="#minh-chung">Minh chứng</a>
+      <a href="#bai2">Bài 2</a>
     </nav>
     <span class="chip">LING270 · Bài 1</span>
   </div>
@@ -352,6 +353,87 @@
         </figure>
       </div>
     </section>
+
+    <!-- ========== BÀI 2 ========== -->
+    <section id="bai2">
+      <h2 class="sec-t">Bài 2: Ảo hóa, container và mô phỏng trung tâm dữ liệu</h2>
+      <p class="sec-s">Đóng gói API của bài 1 thành container, chạy hai bản sao có giới hạn CPU/RAM, phát hành image lên GHCR rồi mô phỏng xếp máy ảo bằng CloudSim Plus. Thực hiện ngày 12/11/2026.</p>
+
+      <div class="kpis">
+        <div class="card kpi"><b>251 MB</b><span>Kích thước image <code>notes-api:1.0</code> (nội dung nén 63,4 MB)</span></div>
+        <div class="card kpi"><b>0,398 s</b><span>Thời gian khởi động một container</span></div>
+        <div class="card kpi"><b>128 MiB</b><span>Giới hạn RAM của container <code>notes2</code> (<code>docker stats</code>)</span></div>
+      </div>
+
+      <h3>Sản phẩm</h3>
+      <ul class="api">
+        <li>Image công khai trên GHCR: <a href="https://github.com/users/LuuLyCong/packages/container/package/notes-api">github.com/users/LuuLyCong/packages/container/package/notes-api</a></li>
+        <li>Kéo về và chạy: <code>docker pull ghcr.io/luulycong/notes-api:1.0</code></li>
+        <li>Mã nguồn: <a href="https://github.com/LuuLyCong/notes-api-2324802010011/blob/main/Dockerfile">Dockerfile</a> và <a href="https://github.com/LuuLyCong/notes-api-2324802010011/blob/main/.dockerignore">.dockerignore</a></li>
+      </ul>
+
+      <h3 style="margin-top:30px">Bảng 1. Codespace (máy ảo) và container <code>notes2</code></h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Tiêu chí</th><th>Codespace (máy ảo)</th><th>Container notes2</th></tr></thead>
+          <tbody>
+            <tr><td>Thời gian khởi động</td><td>Khoảng 4 phút 8 giây từ lúc bấm Create đến khi terminal hiện ra (đo ở bài 1, lần dựng đầu).</td><td>0,398 s, đo bằng <code>time docker run --rm notes-api:1.0 node -e "1"</code>.</td></tr>
+            <tr><td>Kích thước</td><td>Hạn mức lưu trữ miễn phí 15 GB-tháng (theo đề); codespace này đang dùng 2,81 GB.</td><td>251 MB (cột SIZE của <code>docker images</code>).</td></tr>
+            <tr><td>Nhân hệ điều hành</td><td>Riêng: <code>6.8.0-1070-azure</code> của máy ảo Azure.</td><td>Dùng chung với máy chủ: <code>uname -r</code> ở máy chủ và trong container <code>notes1</code> đều là <code>6.8.0-1070-azure</code>.</td></tr>
+            <tr><td>Mức cô lập</td><td>Cao: có nhân và hệ điều hành riêng, được hypervisor cách ly ở mức phần cứng ảo.</td><td>Thấp hơn: chỉ cô lập tiến trình bằng namespaces; giới hạn tài nguyên bằng cgroups (<code>memory.max</code> = 134217728 B = 128 MiB, <code>cpu.max</code> = 50000 100000 = 0,5 CPU) nhưng dùng chung nhân.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Quan sát: <code>GET /</code> của hai container trả <code>host</code> khác nhau (ID container: <code>470d437a10c4</code> và <code>f0b65ea686f1</code>) nhưng <code>cpus: 2</code> và <code>memoryGB: 7.8</code> giống nhau và bằng của máy Codespace. <code>docker stats</code> mới thể hiện giới hạn: <code>notes2</code> 15,52 MiB / 128 MiB, còn <code>notes1</code> 16,29 MiB / 7,756 GiB.</p>
+
+      <h3 style="margin-top:30px">Bảng 2. Mô phỏng CloudSim Plus (<code>BasicFirstExample</code>, JDK 25)</h3>
+      <p class="note">Cấu hình gốc: <code>HOSTS=1</code>, <code>HOST_CORES=8</code>, <code>HOST_MIPS=1000</code>, <code>HOST_RAM=2048</code> MB, <code>VMS=2</code>, <code>VM_CORES=4</code> (VM RAM 512 MB), <code>CLOUDLETS=4</code>, <code>CLOUDLET_CORES=2</code>, <code>CLOUDLET_LENGTH=10000</code> MI. Tên hằng số trong bản mã hiện tại hơi khác đề (<code>HOST_CORES</code>, <code>VM_CORES</code> thay cho <code>HOST_PES</code>, <code>VM_PES</code>).</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Lần</th><th>Thay đổi</th><th>Cloudlet cuối hoàn thành (giây mô phỏng)</th><th>Ghi chú</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>giữ nguyên</td><td>20,1 (mô phỏng kết thúc ở 20,22)</td><td>4/4 cloudlet hoàn thành; mỗi VM chạy 2 cloudlet cùng lúc.</td></tr>
+            <tr><td>1</td><td>nhân đôi <code>VMS</code> (2 → 4)</td><td>45,6 (kết thúc ở 45,71)</td><td>VM 2 và VM 3 không đặt được (12 dòng cảnh báo <code>No suitable host found</code>): máy chủ chỉ có 8 lõi, mỗi VM cần 4 lõi nên chỉ vừa 2 VM. Cloudlet bắt đầu muộn ở 25,6 s vì broker thử tạo VM nhiều lần (5,1 s, 10,2 s, ... 25,5 s) rồi mới bỏ.</td></tr>
+            <tr><td>2</td><td>nhân đôi <code>CLOUDLETS</code> (4 → 8)</td><td>40,1 (kết thúc ở 40,22)</td><td>Chỉ 4/8 cloudlet hoàn thành. Cloudlet 4 đến 7 bị trì hoãn (cảnh báo <code>requested 256 MB of VmRam but no amount is available</code>) và không kịp chạy trước khi mô phỏng kết thúc. 4 cloudlet đầu chạy chậm gấp đôi (40,0 s thay vì 20,0 s).</td></tr>
+            <tr><td>3</td><td>đổi sang <code>CloudletSchedulerSpaceShared</code></td><td>20,1 (kết thúc ở 20,22)</td><td>Giống lần 0 vì mỗi VM có 4 lõi vẫn đủ cho 2 cloudlet × 2 lõi cùng lúc, nên không có hàng đợi.</td></tr>
+            <tr><td>phụ</td><td>SpaceShared kèm <code>CLOUDLETS</code>=8 (thêm để so sánh)</td><td>40,3 (kết thúc ở 40,44)</td><td>8/8 cloudlet hoàn thành thành hai đợt: 4 cloudlet đầu xong ở 20,1 s, 4 cloudlet sau chạy từ 20,2 s đến 40,3 s.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:30px">Câu hỏi phản biện</h3>
+      <div class="card" style="margin-bottom:16px">
+        <p><b>1. Vì sao API trong container <code>notes2</code> vẫn báo <code>memoryGB</code> bằng RAM máy chủ dù đã giới hạn 128 MB?</b></p>
+        <p><code>os.totalmem()</code> đọc thông tin RAM của nhân hệ điều hành, mà nhân được dùng chung giữa máy chủ và mọi container, nên trả về tổng RAM của máy chủ (7,76 GB). Giới hạn 128 MB do cgroups áp đặt, không thay đổi con số mà ứng dụng đọc được; nó chỉ hiện ở <code>docker stats</code> (MEM USAGE / LIMIT) và trong <code>/sys/fs/cgroup/memory.max</code>. Kiểm tra thực tế trong container có <code>--memory=128m --cpus=0.5</code>: <code>os.totalmem()</code> = 7,76 GB nhưng <code>process.constrainedMemory()</code> = 128 MiB; <code>os.cpus().length</code> vẫn là 2.</p>
+        <p>Lưu ý cho ứng dụng: không dựa vào <code>os.totalmem()</code> hay số CPU để tự chọn kích thước bộ nhớ đệm, số luồng; nên đọc giới hạn cgroup (với Node.js dùng <code>process.constrainedMemory()</code>, có thể đặt thêm <code>--max-old-space-size</code> nhỏ hơn giới hạn). JVM từ bản 10 trở đi nhận biết cgroup nên có thể dùng <code>-XX:MaxRAMPercentage</code>. Nếu vượt giới hạn, container bị nhân dừng đột ngột (OOM kill), thường thấy mã thoát 137.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <p><b>2. Time-shared và space-shared khác nhau ra sao? Nhà cung cấp hướng thị trường chọn chính sách nào cho gói giá rẻ?</b></p>
+        <p>Ở lần 3 kết quả giống lần 0 (20,1 s) vì nhu cầu chưa vượt dung lượng: mỗi VM 4 lõi đủ cho 2 cloudlet × 2 lõi. Khác biệt chỉ lộ ra khi cloudlet nhiều hơn lõi, như lần 2 và lần phụ với 8 cloudlet. Time-shared chia CPU của VM cho mọi cloudlet đang chạy, nên ai cũng được chạy nhưng chậm hơn (4 cloudlet đầu mất 40,0 s). Space-shared dành trọn lõi cho từng cloudlet đến khi xong, cloudlet khác xếp hàng: 4 cái đầu xong ở 20,1 s, 4 cái sau xong ở 40,3 s, mỗi cái chạy với tốc độ đầy đủ và thời gian dễ đoán.</p>
+        <p>Với gói giá rẻ, nhà cung cấp hướng thị trường nhiều khả năng chọn time-shared: cho nhiều khách dùng chung cùng lõi giúp tận dụng phần cứng cao hơn và hạ giá mỗi khách, đổi lại hiệu năng không được đảm bảo, dao động theo tải của người khác. Space-shared (lõi dành riêng, hiệu năng ổn định) hợp với gói đắt có cam kết mức dịch vụ.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <p><b>3. Mô phỏng giúp ích gì trước khi thuê hạ tầng thật, và kết quả có thể sai lệch với thực tế ở điểm nào?</b></p>
+        <p>Mô phỏng cho phép thử nhiều cấu hình và chính sách (số máy chủ, số lõi, chính sách đặt VM, lập lịch) mà không tốn tiền thuê, không cần phần cứng, chạy nhanh và lặp lại được. Trong bài, chỉ vài giây chạy đã cho thấy 4 VM không vừa một máy chủ 8 lõi, và 8 cloudlet làm hết RAM của VM, những thứ nếu phát hiện sau khi thuê hạ tầng thật sẽ tốn kém.</p>
+        <p>Sai lệch với thực tế: mô hình đơn giản hóa (CPU tính bằng MIPS, mức dùng cố định 50 %, không có độ trễ mạng thực, lỗi phần cứng, ảnh hưởng của khách láng giềng hay chi phí ảo hóa), thời gian là thời gian giả lập nên luôn xác định (ví dụ 20,1 s mỗi lần chạy), trong khi thực tế dao động. Kết quả chỉ đáng tin bằng chất lượng tham số đầu vào, nên cần hiệu chỉnh và kiểm chứng bằng số đo thật.</p>
+      </div>
+
+      <h3 style="margin-top:30px">Ảnh minh chứng Bài 2</h3>
+      <div class="gallery">
+        <figure><a href="images/b2-01-dockerfile.jpg"><img src="images/b2-01-dockerfile.jpg" alt="Dockerfile trên GitHub" loading="lazy"></a><figcaption><b>Dockerfile.</b> Tệp <code>Dockerfile</code> ở thư mục gốc của repo: image nền <code>node:22-alpine</code>, cài phụ thuộc bằng <code>npm ci --omit=dev</code>, chạy bằng người dùng <code>node</code>, cổng 3000.</figcaption></figure>
+        <figure><a href="images/b2-02-build.jpg"><img src="images/b2-02-build.jpg" alt="docker build" loading="lazy"></a><figcaption><b>Build image.</b> <code>docker build -t notes-api:1.0 .</code> thành công; <code>docker images notes-api</code> cho thấy <code>notes-api:1.0</code>, DISK USAGE 251 MB, CONTENT SIZE 63,4 MB.</figcaption></figure>
+        <figure><a href="images/b2-03-stats.jpg"><img src="images/b2-03-stats.jpg" alt="docker stats" loading="lazy"></a><figcaption><b>Hai container và <code>docker stats</code>.</b> <code>notes1</code> (cổng 3000) và <code>notes2</code> (cổng 3001, <code>--cpus=0.5 --memory=128m</code>). Hai phản hồi <code>GET /</code> có <code>host</code> khác nhau nhưng <code>cpus: 2</code>, <code>memoryGB: 7.8</code> như nhau. Cột MEM USAGE / LIMIT: notes2 giới hạn 128 MiB.</figcaption></figure>
+        <figure><a href="images/b2-04-so-sanh.jpg"><img src="images/b2-04-so-sanh.jpg" alt="So sánh với máy ảo" loading="lazy"></a><figcaption><b>Số liệu so sánh.</b> Thời gian khởi động container 0,398 s; <code>uname -r</code> ở máy chủ và trong container giống nhau; kích thước image 251 MB; giới hạn cgroup của notes2 là 500000000 NanoCpus, 134217728 B bộ nhớ.</figcaption></figure>
+        <figure><a href="images/b2-05-node-gioi-han.jpg"><img src="images/b2-05-node-gioi-han.jpg" alt="Node trong container giới hạn" loading="lazy"></a><figcaption><b>Node.js thấy gì trong container bị giới hạn.</b> <code>os.totalmem()</code> = 7,76 GB, <code>process.constrainedMemory()</code> = 128 MiB, <code>os.cpus().length</code> = 2.</figcaption></figure>
+        <figure><a href="images/b2-06-ghcr-push.jpg"><img src="images/b2-06-ghcr-push.jpg" alt="docker push" loading="lazy"></a><figcaption><b>Đẩy image lên GHCR.</b> <code>docker push ghcr.io/luulycong/notes-api:1.0</code> báo <code>1.0: digest: sha256:a243646423c6...</code>. (Lần đẩy đầu báo lỗi <code>denied</code> ở bước cuối; chạy lại ngay thì thành công.)</figcaption></figure>
+        <figure><a href="images/b2-07-ghcr-public.jpg"><img src="images/b2-07-ghcr-public.jpg" alt="Gói trên GHCR ở chế độ Public" loading="lazy"></a><figcaption><b>Gói <code>notes-api</code> ở chế độ Public.</b> Trang gói trên GitHub hiện nhãn Public, phiên bản 1.0 và lệnh <code>docker pull ghcr.io/luulycong/notes-api:1.0</code>.</figcaption></figure>
+        <figure><a href="images/b2-08-ghcr-pull.jpg"><img src="images/b2-08-ghcr-pull.jpg" alt="Kéo image từ GHCR" loading="lazy"></a><figcaption><b>Kéo lại từ GHCR.</b> Sau khi <code>docker logout ghcr.io</code> và xóa image cục bộ, <code>docker run -d -p 3000:3000 ghcr.io/luulycong/notes-api:1.0</code> tự tải image (<code>Downloaded newer image</code>, cùng digest) và API trả JSON bình thường.</figcaption></figure>
+        <figure><a href="images/b2-09-cloudsim-hang.jpg"><img src="images/b2-09-cloudsim-hang.jpg" alt="Hằng số CloudSim" loading="lazy"></a><figcaption><b>CloudSim Plus: JDK 25 và hằng số.</b> <code>openjdk 25.0.5.0.2</code>, Maven 3.10.0; <code>BasicFirstExample</code> có <code>HOSTS = 1</code>, <code>VMS = 2</code>, <code>CLOUDLETS = 4</code>.</figcaption></figure>
+        <figure><a href="images/b2-10-cloudsim-4-lan.jpg"><img src="images/b2-10-cloudsim-4-lan.jpg" alt="Kết quả 4 lần chạy" loading="lazy"></a><figcaption><b>Kết quả bốn lần chạy.</b> Bảng cloudlet và thời điểm mô phỏng kết thúc của lần 0 đến lần 3 (20,22 s; 45,71 s; 40,22 s; 20,22 s).</figcaption></figure>
+        <figure><a href="images/b2-11-cloudsim-canh-bao.jpg"><img src="images/b2-11-cloudsim-canh-bao.jpg" alt="Cảnh báo VM không đặt được" loading="lazy"></a><figcaption><b>Cảnh báo ở lần 1 và lần 2.</b> Lần 1: <code>No suitable host found for Vm 2/Vm 3</code>, Vm 2 và Vm 3 bị đưa vào danh sách lỗi. Lần 2: cảnh báo cloudlet 4 đến 7 thiếu VmRam.</figcaption></figure>
+        <figure><a href="images/b2-12-cloudsim-lan-phu.jpg"><img src="images/b2-12-cloudsim-lan-phu.jpg" alt="Lần phụ SpaceShared 8 cloudlet" loading="lazy"></a><figcaption><b>Lần phụ: SpaceShared với 8 cloudlet.</b> Cả 8 cloudlet hoàn thành thành hai đợt (kết thúc 20,1 s và 40,3 s), mô phỏng dừng ở 40,44 s.</figcaption></figure>
+      </div>
+    </section>
   </div>
 
   <footer>
@@ -371,7 +453,7 @@
     box.appendChild(c);
   });
   // Làm nổi mục menu theo vị trí cuộn
-  var links = document.querySelectorAll('.links a'), ids = ['top','nist','so-lieu','so-sanh','minh-chung'];
+  var links = document.querySelectorAll('.links a'), ids = ['top','nist','so-lieu','so-sanh','minh-chung','bai2'];
   function mark() {
     var cur = 'top';
     ids.forEach(function (id) { var e = document.getElementById(id); if (e && id !== 'top' && e.getBoundingClientRect().top <= 140) cur = id; });
