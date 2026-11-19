@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello Cloud - Bài 1: Đặc tính điện toán đám mây NIST</title>
+  <title>Hello Cloud - LING270: Bài 1, 2, 3</title>
   <meta name="description" content="Bài 1 Thực hành Điện toán đám mây: API Hello Cloud trên GitHub Codespaces, đối chiếu 5 đặc tính NIST.">
   <style>
     :root {
@@ -133,6 +133,23 @@
       .links { display: none; } .chip { margin-left: auto; } .term { transform: none; }
     }
     @media (max-width: 560px) { .feat { grid-template-columns: 1fr; } .art { min-height: 340px; } }
+      /* ---------- điều hướng hai cấp + trang Bài 3 ---------- */
+    html { scroll-padding-top: 132px; }
+    body:not([data-view="home"]) [data-page="home"], body:not([data-view="bai1"]) [data-page="bai1"], body:not([data-view="bai2"]) [data-page="bai2"], body:not([data-view="bai3"]) [data-page="bai3"] { display: none !important; }
+    .subnav { border-top: 1px solid var(--line); }
+    .subnav.empty { display: none; }
+    .subnav .wrap { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 46px; padding-top: 7px; padding-bottom: 7px; }
+    .subnav a { color: var(--muted); text-decoration: none; font-size: .9rem; padding: 4px 13px; border-radius: 999px; border: 1px solid transparent; }
+    .subnav a:hover { color: var(--fg); }
+    .subnav a.on { color: var(--fg); background: rgba(139,92,246,.22); border-color: var(--card-b); }
+    .term { background: #05071a; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font: 13px/1.6 ui-monospace, Consolas, monospace; color: #d6dbff; white-space: pre; margin: 12px 0; }
+    .bar3 { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
+    .bar3 .l { width: 150px; color: var(--muted); font-size: .92rem; }
+    .bar3 i { display: block; height: 24px; border-radius: 6px; background: var(--grad); }
+    .bar3 i.warn { background: linear-gradient(90deg, #f87171, #fb923c); }
+    svg.dia { width: 100%; height: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+    svg.dia text { fill: #eef0ff; font: 13px system-ui, sans-serif; }
+    .b3q h3 { margin-top: 26px; }
   </style>
 </head>
 <body>
@@ -140,21 +157,20 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top"><span class="logo">☁</span><span>Hello <span class="g">Cloud</span></span></a>
-    <nav class="links">
-      <a class="on" href="#top">Trang chủ</a>
-      <a href="#nist">5 đặc tính NIST</a>
-      <a href="#so-lieu">Số liệu</a>
-      <a href="#so-sanh">So sánh</a>
-      <a href="#minh-chung">Minh chứng</a>
-      <a href="#bai2">Bài 2</a>
-    </nav>
-    <span class="chip">LING270 · Bài 1, 2</span>
+    <nav class="links" id="mainnav">
+        <a href="#home" data-p="home">Trang chủ</a>
+        <a href="#bai1" data-p="bai1">Bài 1</a>
+        <a href="#bai2" data-p="bai2">Bài 2</a>
+        <a href="#bai3" data-p="bai3">Bài 3</a>
+      </nav>
+    <span class="chip">LING270 · Bài 1, 2, 3</span>
   </div>
+  <div class="subnav empty" id="subnav"><div class="wrap" id="sublinks"></div></div>
 </header>
 
 <main id="top">
   <!-- ========== HERO ========== -->
-  <div class="hero">
+  <div class="hero" data-page="home">
     <div class="wrap">
       <div class="grid">
         <div>
@@ -202,7 +218,7 @@
 
   <div class="wrap">
     <!-- ========== 5 ĐẶC TÍNH NIST ========== -->
-    <section id="nist">
+    <section id="nist" data-page="bai1">
       <h2 class="sec-t">5 đặc tính thiết yếu theo NIST</h2>
       <p class="sec-s">Mỗi đặc tính ghép với một thao tác đã làm trong bài lab.</p>
       <div class="nist">
@@ -235,7 +251,7 @@
     </section>
 
     <!-- ========== SỐ LIỆU ========== -->
-    <section id="so-lieu">
+    <section id="so-lieu" data-page="bai1">
       <h2 class="sec-t">Số liệu</h2>
       <p class="sec-s">Đo 10 lần bằng lệnh <code>curl -s -o /dev/null -w "%{time_total}\n" http://localhost:3000/hello</code>, chạy ngay trong Codespace ngày 29/10/2026.</p>
       <div class="kpis">
@@ -279,7 +295,7 @@
     </section>
 
     <!-- ========== SO SÁNH ========== -->
-    <section id="so-sanh">
+    <section id="so-sanh" data-page="bai1">
       <h2 class="sec-t">So sánh: máy cá nhân và Codespace</h2>
       <p class="sec-s">Số liệu thực tế đo ngày 05/11/2026 (giờ Việt Nam).</p>
       <div class="tw">
@@ -317,7 +333,7 @@
     </section>
 
     <!-- ========== MINH CHỨNG ========== -->
-    <section id="minh-chung">
+    <section id="minh-chung" data-page="bai1">
       <h2 class="sec-t">Minh chứng bằng ảnh chụp</h2>
       <p class="sec-s">Ảnh chụp màn hình các bước thực hiện ngày 05/11/2026. Bấm vào ảnh để xem cỡ lớn.</p>
       <div class="gallery">
@@ -357,7 +373,7 @@
     </section>
 
     <!-- ========== BÀI 2 ========== -->
-    <section id="bai2">
+    <section id="bai2" data-page="bai2">
       <h2 class="sec-t">Bài 2: Ảo hóa, container và mô phỏng trung tâm dữ liệu</h2>
       <p class="sec-s">Đóng gói API của bài 1 thành container, chạy hai bản sao có giới hạn CPU/RAM, phát hành image lên GHCR rồi mô phỏng xếp máy ảo bằng CloudSim Plus. Thực hiện ngày 12/11/2026.</p>
 
@@ -455,6 +471,92 @@
         <figure><a href="images/b2-13-secret-cr-pat.jpg"><img src="images/b2-13-secret-cr-pat.jpg" alt="Secret CR_PAT" loading="lazy"></a><figcaption><b>Secret <code>CR_PAT</code>.</b> Settings, Codespaces, Secrets: secret <code>CR_PAT</code> chỉ cấp cho 1 repository (<code>notes-api-2324802010011</code>); giá trị token không hiển thị.</figcaption></figure>
       </div>
     </section>
+      <section id="bai3" data-page="bai3">
+        <h2 class="sec-t">Bài 3: Lưu trữ phân tán – NoSQL và lưu trữ đối tượng</h2>
+        <p class="sec-s">Mở rộng API ghi chú: dữ liệu có cấu trúc nằm trên MongoDB Atlas (replica set 3 nút), tệp đính kèm nằm trên Supabase Storage, MongoDB chỉ giữ URL. Đo được bằng số liệu một chỉ mục giảm khối lượng quét dữ liệu bao nhiêu lần.</p>
+        <div class="kpis">
+          <div class="card kpi"><b>2000 → 571</b><span>docsExamined: quét toàn bộ so với dùng chỉ mục (giảm ≈ 3,5 lần)</span></div>
+          <div class="card kpi"><b>3 nút</b><span>Atlas Free: 1 primary + 2 secondary, AWS Singapore</span></div>
+          <div class="card kpi"><b>201 / 204 / 404 / 400</b><span>Mã trả về đúng ở 5 thao tác CRUD và các tình huống lỗi</span></div>
+        </div>
+        <h3>Sản phẩm</h3>
+        <ul class="api">
+          <li>Commit <code>Bai 3</code>: <a href="https://github.com/LuuLyCong/notes-api-2324802010011/commit/54d2c9b">github.com/LuuLyCong/notes-api-2324802010011/commit/54d2c9b</a></li>
+          <li>Mã nguồn: <code>src/db.js</code>, <code>src/models/note.js</code>, <code>src/storage.js</code>, <code>src/routes/notes.js</code>, <code>scripts/seed.js</code>, <code>scripts/explain.js</code></li>
+          <li>Bí mật (mật khẩu Atlas, khóa secret Supabase) chỉ nằm trong <code>.env</code>, đã đưa vào <code>.gitignore</code> và không commit.</li>
+        </ul>
+        <div id="b3-api">
+          <h3>API và kiểm thử bằng curl</h3>
+          <div class="tw"><table>
+            <thead><tr><th>Tình huống</th><th>Mã trả về</th><th>Kết quả</th></tr></thead>
+            <tbody>
+              <tr><td><code>POST /notes</code> (dữ liệu hợp lệ)</td><td>201</td><td>Đạt</td></tr>
+              <tr><td><code>GET /notes?tag=nosql</code></td><td>200</td><td>Đạt</td></tr>
+              <tr><td><code>PUT /notes/:id</code></td><td>200</td><td>Đạt</td></tr>
+              <tr><td><code>POST /notes/:id/attachment</code> (note.txt)</td><td>200, có <code>attachmentUrl</code></td><td>Đạt</td></tr>
+              <tr><td>Mở <code>attachmentUrl</code> trên trình duyệt</td><td>200</td><td>Đạt</td></tr>
+              <tr><td><code>POST /notes</code> với thân rỗng, <code>GET /notes/abc</code></td><td>400</td><td>Đạt</td></tr>
+              <tr><td><code>GET /notes/000000000000000000000000</code></td><td>404</td><td>Đạt</td></tr>
+              <tr><td><code>DELETE /notes/:id</code>, rồi xóa lại</td><td>204, rồi 404</td><td>Đạt</td></tr>
+            </tbody>
+          </table></div>
+<div class="term">$ npm start
+Đã kết nối MongoDB Atlas
+API đang chạy tại cổng 3000
+
+PUT  /notes/:id             -> 200
+POST /notes/:id/attachment  -> 200
+GET  attachmentUrl          -> 200
+DELETE /notes/:id           -> 204</div>
+          <p class="note">Tệp đính kèm lưu trên Supabase Storage (bucket <code>attachments</code>, public). MongoDB chỉ lưu <code>attachmentUrl</code>, không lưu nội dung tệp.</p>
+        </div>
+        <div id="b3-explain">
+          <h3>Đo hiệu quả chỉ mục (<code>explain.js</code>)</h3>
+          <p>Nạp 2.000 ghi chú bằng <code>seed.js</code>, rồi so sánh <code>find({ tags: 'docker' })</code> khi ép quét toàn bộ (<code>hint({ $natural: 1 })</code>) với khi dùng chỉ mục <code>tags_1</code>.</p>
+          <div class="tw"><table>
+            <thead><tr><th>Cách truy vấn</th><th>docsExamined</th><th>returned</th><th>ms</th></tr></thead>
+            <tbody>
+              <tr><td>Quét toàn bộ</td><td>2000</td><td>571</td><td>1</td></tr>
+              <tr><td>Dùng chỉ mục</td><td>571</td><td>571</td><td>1</td></tr>
+            </tbody>
+          </table></div>
+          <div class="bar3"><span class="l">Quét toàn bộ</span><i class="warn" style="width:70%"></i><b>2000</b></div>
+          <div class="bar3"><span class="l">Dùng chỉ mục</span><i style="width:20%"></i><b>571</b></div>
+          <p class="note">Tỉ số docsExamined = 2000 / 571 ≈ 3,5 lần. Với 2.000 tài liệu thời gian đều ≈ 1 ms nên khó thấy khác biệt; khối lượng còn phải đọc mới là đại lượng sẽ tăng theo số tài liệu.</p>
+        </div>
+        <div id="b3-atlas">
+          <h3>Atlas (3 nút) so với HDFS (NameNode/DataNode)</h3>
+          <svg class="dia" viewBox="0 0 760 270" role="img" aria-label="So sánh replica set Atlas và HDFS">
+            <text x="190" y="26" text-anchor="middle" font-weight="700">MongoDB Atlas (replica set)</text>
+            <text x="570" y="26" text-anchor="middle" font-weight="700">HDFS</text>
+            <line x1="380" y1="10" x2="380" y2="255" stroke="#6b6fa8" stroke-dasharray="4 5"/>
+            <rect x="20" y="110" width="105" height="80" rx="10" fill="#166534" stroke="#34d399"/><text x="72" y="142" text-anchor="middle">Primary</text><text x="72" y="162" text-anchor="middle">bản đầy đủ</text>
+            <rect x="140" y="110" width="105" height="80" rx="10" fill="#312e81" stroke="#8b5cf6"/><text x="192" y="142" text-anchor="middle">Secondary 1</text><text x="192" y="162" text-anchor="middle">bản đầy đủ</text>
+            <rect x="260" y="110" width="105" height="80" rx="10" fill="#312e81" stroke="#8b5cf6"/><text x="312" y="142" text-anchor="middle">Secondary 2</text><text x="312" y="162" text-anchor="middle">bản đầy đủ</text>
+            <text x="190" y="225" text-anchor="middle">Nhân bản TOÀN BỘ dữ liệu tới mỗi nút</text>
+            <rect x="480" y="44" width="180" height="46" rx="10" fill="#1e3a8a" stroke="#38bdf8"/><text x="570" y="72" text-anchor="middle">NameNode (metadata)</text>
+            <rect x="395" y="130" width="108" height="70" rx="10" fill="#312e81" stroke="#8b5cf6"/><text x="449" y="160" text-anchor="middle">DataNode 1</text><text x="449" y="180" text-anchor="middle">khối A, B</text>
+            <rect x="516" y="130" width="108" height="70" rx="10" fill="#312e81" stroke="#8b5cf6"/><text x="570" y="160" text-anchor="middle">DataNode 2</text><text x="570" y="180" text-anchor="middle">khối A, C</text>
+            <rect x="637" y="130" width="108" height="70" rx="10" fill="#312e81" stroke="#8b5cf6"/><text x="691" y="160" text-anchor="middle">DataNode 3</text><text x="691" y="180" text-anchor="middle">khối B, C</text>
+            <line x1="570" y1="90" x2="449" y2="130" stroke="#a9aed0"/><line x1="570" y1="90" x2="570" y2="130" stroke="#a9aed0"/><line x1="570" y1="90" x2="691" y2="130" stroke="#a9aed0"/>
+            <text x="570" y="225" text-anchor="middle">Nhân bản từng KHỐI (mặc định 3 bản)</text>
+          </svg>
+          <div class="tw"><table>
+            <thead><tr><th></th><th>MongoDB Atlas</th><th>HDFS</th></tr></thead>
+            <tbody>
+              <tr><td>Giống</td><td>Nhân bản 3 lần để chịu lỗi, tự phục hồi khi một nút hỏng</td><td>Nhân bản mỗi khối 3 lần để chịu lỗi, tự tạo lại bản sao khi DataNode hỏng</td></tr>
+              <tr><td>Đơn vị nhân bản</td><td>Toàn bộ tập dữ liệu (mỗi nút giữ bản đầy đủ)</td><td>Từng khối của tệp, rải trên nhiều DataNode</td></tr>
+              <tr><td>Vai trò nút</td><td>Primary nhận ghi, secondary sao chép; bầu primary mới khi lỗi</td><td>NameNode giữ metadata, DataNode giữ khối dữ liệu</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div id="b3-hoi" class="b3q">
+          <h3>Câu hỏi phản biện</h3>
+          <p><b>1. Với 2 triệu tài liệu và giới hạn 100 thao tác/giây?</b> Quét toàn bộ phải đọc mọi tài liệu (2.000.000), còn chỉ mục chỉ đọc các tài liệu khớp (≈ 571.000 nếu giữ phân bố thẻ như thí nghiệm). Mỗi truy vấn quét toàn bộ khi đó tốn hàng trăm đến hàng nghìn ms và chiếm hết tài nguyên cụm Free, nên chỉ vài chục truy vấn đồng thời là chạm trần 100 thao tác/giây; 2 triệu tài liệu còn dễ vượt 512 MB. Cần chỉ mục phù hợp, phân trang, bộ nhớ đệm, rồi nâng gói hoặc sharding.</p>
+          <p><b>2. Vì sao lưu tệp trên Supabase, chỉ lưu URL trong MongoDB?</b> Tài liệu MongoDB tối đa 16 MB; tệp lớn làm phình cơ sở dữ liệu và chiếm bộ nhớ đệm; kho đối tượng rẻ hơn, phục vụ trực tiếp qua URL/CDN, và hai loại dữ liệu mở rộng, sao lưu độc lập.</p>
+          <p><b>3. Mục tiêu chung của con số 3 và khác biệt đơn vị nhân bản?</b> Mục tiêu là chịu lỗi và sẵn sàng cao: mất một nút vẫn còn ít nhất hai bản. Atlas nhân bản toàn bộ dữ liệu lên mỗi nút; HDFS nhân bản từng khối của tệp và rải trên nhiều DataNode.</p>
+        </div>
+      </section>
   </div>
 
   <footer>
@@ -473,14 +575,39 @@
     c.innerHTML = '<span class="v">' + (v * 1000).toFixed(2) + '</span><div class="bar" style="height:' + Math.round(v / max * 150) + 'px"></div><span class="l">Lần ' + (i + 1) + '</span>';
     box.appendChild(c);
   });
-  // Làm nổi mục menu theo vị trí cuộn
-  var links = document.querySelectorAll('.links a'), ids = ['top','nist','so-lieu','so-sanh','minh-chung','bai2'];
+    // Điều hướng hai cấp: Trang chủ / Bài 1 / Bài 2 / Bài 3
+  var PAGES = {
+    home: [],
+    bai1: [['nist', '5 đặc tính NIST'], ['so-lieu', 'Số liệu'], ['so-sanh', 'So sánh'], ['minh-chung', 'Minh chứng']],
+    bai2: [['bai2', 'Tổng quan']],
+    bai3: [['bai3', 'Tổng quan'], ['b3-api', 'API và kiểm thử'], ['b3-explain', 'Đo chỉ mục'], ['b3-atlas', 'Atlas và HDFS'], ['b3-hoi', 'Câu hỏi phản biện']]
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('#bai2 h3'), function (h, i) {
+    h.id = 'b2-' + (i + 1); PAGES.bai2.push(['b2-' + (i + 1), h.textContent.trim()]);
+  });
+  var secPage = {};
+  Object.keys(PAGES).forEach(function (p) { PAGES[p].forEach(function (s) { secPage[s[0]] = p; }); });
+  var navLinks = document.querySelectorAll('#mainnav a'), sub = document.getElementById('sublinks'), subnav = document.getElementById('subnav');
   function mark() {
-    var cur = 'top';
-    ids.forEach(function (id) { var e = document.getElementById(id); if (e && id !== 'top' && e.getBoundingClientRect().top <= 140) cur = id; });
-    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + cur); });
+    var cur = '', list = PAGES[document.body.getAttribute('data-view')] || [];
+    list.forEach(function (s) { var e = document.getElementById(s[0]); if (e && e.getBoundingClientRect().top <= 170) cur = s[0]; });
+    Array.prototype.forEach.call(sub.querySelectorAll('a'), function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + cur); });
   }
-  window.addEventListener('scroll', mark, { passive: true }); mark();
+  function route() {
+    var h = decodeURIComponent(location.hash.slice(1)) || 'home';
+    var p = PAGES[h] ? h : (secPage[h] || 'home');
+    document.body.setAttribute('data-view', p);
+    Array.prototype.forEach.call(navLinks, function (a) { a.classList.toggle('on', a.getAttribute('data-p') === p); });
+    var list = PAGES[p]; sub.innerHTML = '';
+    list.forEach(function (s) { var a = document.createElement('a'); a.href = '#' + s[0]; a.textContent = s[1]; sub.appendChild(a); });
+    subnav.className = 'subnav' + (list.length ? '' : ' empty');
+    var el = (h !== p && secPage[h]) ? document.getElementById(h) : null;
+    if (el) { setTimeout(function () { el.scrollIntoView(); mark(); }, 0); } else { window.scrollTo(0, 0); }
+    mark();
+  }
+  window.addEventListener('hashchange', route);
+  window.addEventListener('scroll', mark, { passive: true });
+  route();
 </script>
 </body>
 </html>
