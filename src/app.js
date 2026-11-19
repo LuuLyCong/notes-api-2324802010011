@@ -28,4 +28,14 @@ app.get('/hello', (req, res) => {
   });
 });
 
+const notesRouter = require('./routes/notes');
+app.use('/notes', notesRouter);
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  const clientError = ['ValidationError', 'CastError'].includes(err.name)
+    || err.code === 'LIMIT_FILE_SIZE';
+  res.status(clientError ? 400 : 500).json({ error: err.message });
+});
+
 module.exports = app;
